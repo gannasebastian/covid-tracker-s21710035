@@ -1,4 +1,5 @@
 import React from 'react';
+//import NumberFormat from "react-number-format";
 import { Card, CardContent, Typography, Grid } from '@material-ui/core';
 import styles from './Cards.module.css';
 import CountUp from 'react-countup';
@@ -25,7 +26,7 @@ const Cards = ({data: {confirmed, recovered, deaths, lastUpdate}}) => {
                             />
                         </Typography>
                         <Typography colr="textSecondary">{new Date(lastUpdate).toDateString()}</Typography>
-                        <Typography variant="body2">Number of Active Cases</Typography>
+                        <Typography variant="body2">Confirmed Active Cases</Typography>
                     </CardContent>
                 </Grid>
                 <Grid items component={Card} xs={12} md={3} classnames={cx(styles.card, styles.recovered)}>

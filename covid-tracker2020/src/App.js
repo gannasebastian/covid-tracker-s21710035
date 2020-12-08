@@ -1,21 +1,23 @@
 import React from 'react';
-
+//import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom";
 import {Cards,Chart,CountryPicker} from './components';
 import styles from './App.module.css';
-import { fetchData } from './api';
+import {fetchData, fetchIndo} from './api';
 
 import coronaImage from './images/image.png';
 
 class App extends React.Component {
     state = {
         data: {},
+        dataIndo: {},
         country: '',
     }
 
     async componentDidMount(){
         const fetchedData = await fetchData();
-        
+        const fetchedIndonesia = await fetchIndo();
         this.setState({ data: fetchedData });
+        this.setState({ dataIndo: fetchedIndonesia });
         //console.log(data);
     }
 
@@ -29,14 +31,16 @@ class App extends React.Component {
     }
 
     render(){
-        const { data, country } = this.state;
+        const { data, country, dataIndo } = this.state;
         return(
             <div className={styles.container}>
                 <img classnames={styles.image} src={coronaImage} alt="COVID-19"/>
-                <Cards data={data}/>
+                <h2>Welcome to the COVID Tracker Web Application</h2>
+                <h3>Pick a country</h3>
                 <CountryPicker handleCountryChange={this.handleCountryChange} />
+                <Cards data={data}/>
                 <Chart data={data} country={country}/>
-            </div>
+          </div>
         )
     }
 }

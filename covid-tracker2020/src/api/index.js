@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-// buat url untuk API (global case)
-const url = 'https://covid19.mathdro.id/api';
+const url = 'https://covid19.mathdro.id/api'; // buat url untuk API (global case + countries)
+const urlIndo = 'https://indonesia-covid-19.mathdro.id/api'; // url untuk API (Indonesia Provinces)
 
+// Fetch Data utama (global)
 export const fetchData = async (country) => {
     let changeableUrl = url;
     if(country){
@@ -18,6 +19,7 @@ export const fetchData = async (country) => {
     }
 }
 
+// Fetch Data per-hari (global)
 export const fetchDailyData = async () => {
     try {
         const  {data} = await axios.get(`${url}/daily`);
@@ -34,11 +36,37 @@ export const fetchDailyData = async () => {
     }
 }
 
+// Fetch Data per-negara (global => termasuk indonesia)
 export const fetchCountries = async () => {
     try {
         const { data: {countries}} = await axios.get(`${url}/countries`);
 
         return countries.map((country) => country.name);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+// Fetch Data kasus di Indonesia
+export const fetchIndo = async () => {
+    try {
+      const { data: { jumlahKasus: confirmed, meninggal: deaths, sembuh: recovered }, } = await axios.get(urlIndo);
+      return { confirmed, recovered, deaths };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+// Fetch Data kasus di Indonesia (provinsi)
+export const fetchProvince = async () => {
+    try {
+        const  {data: {data: provinces}, } = await axios.get(`${urlIndo}/provinsi`);
+        return provinces.map((provinsi) => ({
+            name: provinsi.provinsi,
+            confirmed: provinsi.kasusPosi,
+            recovered: provinsi.kasusSemb,
+            deaths: provinsi.kasusMeni,
+        }));
     } catch (error) {
         console.log(error);
     }
